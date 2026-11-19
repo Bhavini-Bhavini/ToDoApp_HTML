@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do App</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+        #leftPane {
+            width: 40%;
+            background: #e6e6e6;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        #leftPane h2 {
+            margin-top: 0;
+        }
+        .task {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        .task span {
+            flex: 1;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+        .icons {
+            display: flex;
+            gap: 10px;
+        }
+        .delete {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #rightPane {
+            width: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #editableText {
+            font-size: 40px;
+            color: #888;
+            outline: none;
+            border-bottom: 2px solid #ccc;
+            min-width: 300px;
+        }
+        #editableText:empty:before {
+            content: "I need to...";
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div id="leftPane">
+        <h2>TASK LIST</h2>
+        <p>Add tasks to your list by typing to the right and pressing enter.You may then view pending tasks below.</p>
+        <div id="taskList"></div>
+    </div>
+    <div id="rightPane">
+        <div id="editableText" contenteditable="true"></div>
+    </div>
+<script>
+    const editable = document.getElementById("editableText");
+    const taskList = document.getElementById("taskList");
+    editable.addEventListener("keydown", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            const text = editable.innerText.trim();
+            if (text !== "") {
+                addTask(text);
+                editable.innerText = "";
+            }
+        }
+    });
+    function addTask(text) {
+        const taskDiv = document.createElement("div");
+        taskDiv.className = "task";
+
+        const span = document.createElement("span");
+        span.innerText = text;
+
+        const icons = document.createElement("div");
+        icons.className = "icons";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.onclick = () => {
+            span.classList.toggle("completed");
+        };
+
+        const del = document.createElement("span");
+        del.innerText = "×";
+        del.className = "delete";
+        del.onclick = () => {
+            taskDiv.remove();
+        };
+
+        icons.appendChild(checkbox);
+        icons.appendChild(del);
+
+        taskDiv.appendChild(span);
+        taskDiv.appendChild(icons);
+
+        taskList.appendChild(taskDiv);
+    }
+</script>
+
+</body>
+</html>
